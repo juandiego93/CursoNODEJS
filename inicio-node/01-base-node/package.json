@@ -1,0 +1,17 @@
+{
+  "name": "01-base-node",
+  "version": "1.0.0",
+  "description": "Esta es un app de linea de comandos ",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Juan Diego Osorio Castrillón",
+  "license": "ISC",
+  "dependencies": {
+    "yargs": "^16.0.3"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4"
+  }
+}
