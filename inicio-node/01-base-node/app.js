@@ -12,6 +12,7 @@
 
 const argv = require('./config/yargs').argv;
 const { crearArchivo, listarTabla } = require('./multiplicar/multiplicar')
+const colors = require('colors/safe')
 
 let comando = argv._[0]
 
@@ -21,7 +22,7 @@ switch (comando) {
         break;
     case 'crear':
         crearArchivo(argv.base)
-            .then((result) => console.log(`Archivo creado en ${result}`))
+            .then((result) => console.log(`Archivo creado en `, colors.green(`${result}`)))
             .catch((err) => console.log(err));
         break;
 }
