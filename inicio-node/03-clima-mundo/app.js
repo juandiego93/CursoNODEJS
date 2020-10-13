@@ -1,4 +1,5 @@
-const axios = require('axios')
+const lugar = require('./lugar/lugar')
+const clima = require('./clima/clima')
 const argv = require('yargs').options({
     direccion: {
         alias: 'd',
@@ -7,19 +8,24 @@ const argv = require('yargs').options({
     }
 }).argv
 
-const encodedURL = encodeURI(argv.direccion) 
-const TOKEN = 'pk.eyJ1IjoianVhbmR5LTE0IiwiYSI6ImNrZzc0OWxvMjAzczUyeXFtMHJ4N3RzdGIifQ.IUPcm4_TdgUQKi3Jdx0_8g'
-const url = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodedURL}.json`
+// lugar.getLugarLatLong(argv.direccion)
+//     .then(console.log)
+//     .catch(console.log)
 
-const instance = axios.create({
-    params: { 'access_token': TOKEN }
-})
+// clima.getClima(-74.08083, 4.59889)
+//     .then(console.log)
+//     .catch(console.log)
 
-instance
-    .get(url)
-    .then(resp => {
-        console.log(resp.data.features);
-    })
-    .catch(err => {
-        console.log('ERROR !!! ', err);
-    })
+const getInfo = async (direccion) => {
+    try {
+        const coord = await lugar.getLugarLatLong(direccion)
+        const temp = await clima.getClima(coord.lat, coord.lon)
+        return `El clima de ${direccion} es de ${temp}`
+    } catch (error) {
+        return `No se pudo determinar el clima de ${direccion} - Error ${error}`
+    }
+}
+
+getInfo(argv.direccion)
+    .then(console.log)
+    .catch(console.log)
