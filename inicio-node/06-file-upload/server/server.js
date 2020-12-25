@@ -6,7 +6,6 @@ const path = require('path')
 const fileUpload = require('express-fileupload')
 const app = express()
 app.use(fileUpload());
-app.use(fileUpload({ useTempFiles: true }))
 
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
