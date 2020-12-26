@@ -57,7 +57,12 @@ app.put('/upload/:tipo/:id', (request, response) => {
         }
 
         //Imagen cargada
-        ImageUser(id, response, nameFile)
+        //Verificacion de imagen y existencia 
+        if (tipo === 'usuarios') {
+            ImageUser(id, response, nameFile)
+        } else {
+            ImageProduct(id, response, nameFile)
+        }
     })
 
     function ImageUser(id, response, nameFile) {
@@ -98,7 +103,44 @@ app.put('/upload/:tipo/:id', (request, response) => {
         })
     }
 
-    function ImageProduct() { }
+    function ImageProduct(id, response, nameFile) {
+        Producto.findById(id, (err, productoDB) => {
+            if (err) {
+                removeFile(nameFile, 'productos')
+                return response
+                    .status(500)
+                    .json({
+                        ok: false,
+                        err
+                    })
+            }
+
+            if (!productoDB) {
+                removeFile(nameFile, 'productos')
+                return response
+                    .status(500)
+                    .json({
+                        ok: false,
+                        err,
+                        message: 'Product doesn`t exist. GTV 043 f.0730'
+                    })
+            }
+
+            removeFile(productoDB.img, 'productos')
+
+            productoDB.img = nameFile
+            productoDB.save((err, userSaved) => {
+                response.json({
+                    ok: true,
+                    message: 'Image upload Successfully',
+                    user: productoDB,
+                    img: nameFile
+                })
+            })
+
+        })
+
+    }
 
 
     function removeFile(nameFile, type) {

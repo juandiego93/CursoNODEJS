@@ -34,7 +34,26 @@ let verifyRoleAdmin = (request, response, next) => {
     }
 }
 
+
+let verifyTokenbyURLImg = (request, response, next) => {
+    let paramToken = request.query.token
+    // response.json(paramToken)
+    try {
+        verifyTokenStatus = jwt.verify(paramToken, process.env.SEED)
+        if (verifyTokenStatus) {
+            request.usuario = verifyTokenStatus.usuario
+            next()
+        }
+    } catch (err) {
+        return response.status(500).json({
+            ok: false,
+            err
+        })
+    }
+}
+
 module.exports = {
     verifyToken,
-    verifyRoleAdmin
+    verifyRoleAdmin,
+    verifyTokenbyURLImg
 }
